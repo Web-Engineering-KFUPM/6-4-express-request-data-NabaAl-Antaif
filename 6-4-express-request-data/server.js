@@ -127,9 +127,9 @@ app.get("/echo", (req,res)=>{
 });
 
 // Route params: /profile/First/Last
-app.get("/profile/:first/:last", (req,res)=>{
+app.get("/profile/First/Last", (req,res)=>{
    const { first, last } = req.params;
-   return res.status(200).json({ ok:true, fullName: "<first> <last>"})
+   return res.status(200).json({ ok:true, fullName: "<first> <last>" })
 });
 
 
