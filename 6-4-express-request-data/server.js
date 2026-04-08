@@ -112,7 +112,7 @@ import express from "express";
 // create express app instance to create web server
 const app = express();
 app.get("/", (req, res)=>{
-  res.send("server is up");
+   res.send("server is up");
    }
 );
 
@@ -121,35 +121,34 @@ app.get("/", (req, res)=>{
 app.get("/echo", (req,res)=>{
    const {name, age} = req.query
    if (!req.query.name || !req.query.age) {
-     return res.status(400).json({ ok: false, error: "name & age required" });
+      return res.status(400).json({ ok: false, error: "name & age required" });
    }
-   return res.status(200).json({ok: true, name, age, msg: "Hello <name>, you are <age>"});
+   return res.status(200).json({ok: true, name, age, msg: `Hello ${name}, you are ${age}`});
 });
 
 // Route params: /profile/First/Last
-app.get("/profile/First/Last", (req,res)=>{
+app.get("/profile/:first/:last", (req,res)=>{
    const { first, last } = req.params;
-   return res.status(200).json({ ok:true, fullName: "<first> <last>" })
+   return res.status(200).json({ ok:true, fullName: `${first} ${last}` });
 });
 
 
 // Route param middleware example: /users/42
 app.param("userId", (req,res,next,userId)=>{
    const n = Number(userId);
-  if (n < 0) {
-    return res.status(400).json({ ok: false, error: { ok:false, error:"userId must be positive number" }});
-  }
-  req.userId= n; 
-  next();
+   if (isNaN(n) || n < 0) {
+      return res.status(400).json({ ok: false, error:"userId must be positive number" });
+   }
+   req.userIdNum = n;
+   next();
 });
 
 
 // Route params: /users/:userId route
 app.get("/users/:userId", (req,res)=>{
-    return res.status(200).json({ ok:true, userId: req.userIdNum })
+   return res.status(200).json({ ok:true, userId: req.userIdNum })
 });
 
 
 // Start the server by listening
 app.listen(3000, ()=> console.log("API running at http://localhost:3000"));
-
